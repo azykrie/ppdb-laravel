@@ -27,6 +27,7 @@
                     </a>
                 </div>
 
+                {{-- NAVIGASI UNTUK DESKTOP (md ke atas) --}}
                 <div class="hidden md:block">
                     <nav aria-label="Global">
                         <ul class="flex items-center gap-6 text-sm">
@@ -45,49 +46,51 @@
 
                 <div class="flex items-center gap-4">
                     <div class="sm:flex sm:gap-4">
-                        <a
-                            class="rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white shadow transition hover:bg-teal-700"
-                            href=""
-                        >
+                        <a class="rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white shadow transition hover:bg-teal-700" href="{{ route('login.index') }}">
                             Login
                         </a>
-
                         <div class="hidden sm:flex">
-                            <a
-                                class="rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-teal-600 transition hover:bg-gray-200"
-                                href=""
-                            >
+                            <a class="rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-teal-600 transition hover:bg-gray-200" href="{{ route('register.index') }}">
                                 Register
                             </a>
                         </div>
                     </div>
 
+                    {{-- TOMBOL BURGER UNTUK MOBILE --}}
                     <div class="block md:hidden">
-                        <button class="rounded bg-gray-100 p-2 text-gray-600 transition hover:text-gray-600/75">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="h-5 w-5"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                stroke-width="2"
-                            >
+                        {{-- Memberikan ID agar bisa dipilih oleh JavaScript --}}
+                        <button id="burger-button" class="rounded bg-gray-100 p-2 text-gray-600 transition hover:text-gray-600/75">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
                         </button>
                     </div>
                 </div>
             </div>
+
+            {{-- MENU DROPDOWN UNTUK MOBILE --}}
+            {{-- Memberikan ID dan class 'hidden' secara default --}}
+            <nav id="mobile-menu" class="hidden md:hidden border-t border-gray-100">
+                <ul class="flex flex-col items-center gap-2 py-4 text-sm">
+                    <li>
+                        <a class="text-gray-500 transition hover:text-gray-500/75 w-full text-center block py-2" href="#"> Beranda </a>
+                    </li>
+                    <li>
+                        <a class="text-gray-500 transition hover:text-gray-500/75 w-full text-center block py-2" href="#"> Pendaftaran </a>
+                    </li>
+                    <li>
+                        <a class="text-gray-500 transition hover:text-gray-500/75 w-full text-center block py-2" href="#"> Pengumuman </a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </header>
-
 
     <main class="py-12">
         <div class="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
             @yield('content')
         </div>
     </main>
-
 
     <footer class="bg-white">
         <div class="mx-auto max-w-screen-xl px-4 pb-8 sm:px-6 lg:px-8">
@@ -100,6 +103,18 @@
     </footer>
 
     @stack('scripts')
-</body>
 
+    {{-- Script untuk meng-handle klik tombol burger --}}
+    <script>
+        // Pilih elemen tombol dan menu berdasarkan ID yang sudah kita buat
+        const burgerButton = document.getElementById('burger-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        // Tambahkan 'event listener' untuk mendengarkan event 'click' pada tombol
+        burgerButton.addEventListener('click', () => {
+            // Toggle (tambah/hapus) class 'hidden' pada elemen menu
+            mobileMenu.classList.toggle('hidden');
+        });
+    </script>
+</body>
 </html>
