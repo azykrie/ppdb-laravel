@@ -1,12 +1,14 @@
 <?php
 
+use App\Http\Controllers\Admin\CalonSiswaController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\User\DashboardController as UserDashboardController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\PortalPendafataranController;
 use App\Http\Controllers\User\BioDataController;
+use App\Http\Controllers\User\DashboardController as UserDashboardController;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -27,12 +29,27 @@ Route::post('register', [RegisterController::class, 'store'])->name('register.st
 
 
 Route::prefix('admin')->name('admin.')->group(function () {
+
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
+    Route::prefix('calon-siswa')->name('calon-siswa.')->group(function () {
+        Route::get('/', [CalonSiswaController::class, 'index'])->name('index');
+        Route::get('/{biodataSiswa}', [CalonSiswaController::class, 'show'])->name('show');
+        Route::put('/{biodataSiswa}', [CalonSiswaController::class, 'update'])->name('update');
+    });
 });
 
 
 Route::prefix('user')->name('user.')->group(function () {
+
     Route::get('dashboard', [UserDashboardController::class, 'index'])->name('dashboard.index');
-    Route::get('biodata', [BioDataController::class, 'index'])->name('biodata.index');
+
+    Route::prefix('biodata')->name('biodata.')->group(function () {
+        Route::get('/', [BioDataController::class, 'index'])->name('index');
+        Route::get('/create', [BioDataController::class, 'create'])->name('create');
+        Route::post('/', [BioDataController::class, 'store'])->name('store');
+        Route::get('/{biodataSiswa}/edit', [BioDataController::class, 'edit'])->name('edit');
+        Route::put('/{biodataSiswa}', [BioDataController::class, 'update'])->name('update');
+    });
+
 });

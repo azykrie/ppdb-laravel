@@ -19,7 +19,13 @@
 
         <ul class="mt-6 space-y-1">
             <li>
-                <a href="#"
+                <a href="{{ route('user.dashboard.index') }}"
+                    class="block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700">
+                    Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('user.biodata.index') }}"
                     class="block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700">
                     Biodata Siswa
                 </a>
