@@ -25,7 +25,6 @@ class BiodataSiswa extends Model
         'foto_nilai_rapor',
         'foto_ijazah',
         'foto_formal',
-        // --- Kolom baru untuk verifikasi ---
         'verification_status',
         'verification_notes',
         'verified_by_user_id',

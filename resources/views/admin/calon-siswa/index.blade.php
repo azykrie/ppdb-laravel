@@ -5,17 +5,6 @@
 <div class="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 lg:px-8">
     <div class="sm:flex sm:items-center sm:justify-between">
         <h1 class="text-2xl font-bold text-gray-900 sm:text-3xl">Daftar Calon Siswa & Verifikasi Biodata</h1>
-
-        <div class="mt-4 flex flex-col gap-4 sm:mt-0 sm:flex-row sm:items-center">
-            {{-- Tombol Tambah/Aksi lain jika diperlukan --}}
-            {{-- <a
-                href="#"
-                class="inline-flex items-center justify-center gap-1.5 rounded-lg border border-gray-200 px-5 py-3 text-gray-500 transition hover:bg-gray-50 hover:text-gray-700 focus:outline-none focus:ring"
-                type="button"
-            >
-                <span class="text-sm font-medium"> Tambah Calon Siswa </span>
-            </a> --}}
-        </div>
     </div>
 
     {{-- Pesan Notifikasi (Success/Error) --}}

@@ -131,52 +131,81 @@
                     @enderror
                 </div>
 
-                {{-- Bagian Upload Foto --}}
+                {{-- Bagian Upload Foto dengan Preview --}}
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                    {{-- Foto Nilai Rapor --}}
                     <div>
                         <label for="foto_nilai_rapor" class="block text-sm font-medium text-gray-700">Foto Nilai
                             Rapor</label>
                         <input type="file"
                             class="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"
-                            id="foto_nilai_rapor" name="foto_nilai_rapor" />
+                            id="foto_nilai_rapor" name="foto_nilai_rapor"
+                            onchange="previewImage(event, 'preview_foto_nilai_rapor')" />
                         @error('foto_nilai_rapor')
                             <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                         @enderror
                         @if (isset($biodataSiswa->foto_nilai_rapor) && $biodataSiswa->foto_nilai_rapor)
-                            <p class="mt-2 text-xs text-gray-500">File saat ini: <a
-                                    href="{{ asset('storage/' . $biodataSiswa->foto_nilai_rapor) }}" target="_blank"
-                                    class="text-blue-600 hover:underline">Lihat</a></p>
+                            <div class="mt-2 text-center">
+                                <p class="text-xs text-gray-500 mb-1">File saat ini:</p>
+                                <img id="current_foto_nilai_rapor"
+                                    src="{{ asset('storage/' . $biodataSiswa->foto_nilai_rapor) }}"
+                                    alt="Current Foto Rapor"
+                                    class="w-32 h-32 object-cover mx-auto rounded-lg border border-gray-200">
+                            </div>
                         @endif
+                        <div class="mt-2 text-center">
+                            <p class="text-xs text-gray-500 mb-1">Preview:</p>
+                            <img id="preview_foto_nilai_rapor" src="#" alt="Preview Foto Rapor"
+                                class="hidden w-32 h-32 object-cover mx-auto rounded-lg border border-gray-200">
+                        </div>
                     </div>
 
+                    {{-- Foto Ijazah --}}
                     <div>
                         <label for="foto_ijazah" class="block text-sm font-medium text-gray-700">Foto Ijazah</label>
                         <input type="file"
                             class="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"
-                            id="foto_ijazah" name="foto_ijazah" />
+                            id="foto_ijazah" name="foto_ijazah" onchange="previewImage(event, 'preview_foto_ijazah')" />
                         @error('foto_ijazah')
                             <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                         @enderror
                         @if (isset($biodataSiswa->foto_ijazah) && $biodataSiswa->foto_ijazah)
-                            <p class="mt-2 text-xs text-gray-500">File saat ini: <a
-                                    href="{{ asset('storage/' . $biodataSiswa->foto_ijazah) }}" target="_blank"
-                                    class="text-blue-600 hover:underline">Lihat</a></p>
+                            <div class="mt-2 text-center">
+                                <p class="text-xs text-gray-500 mb-1">File saat ini:</p>
+                                <img id="current_foto_ijazah" src="{{ asset('storage/' . $biodataSiswa->foto_ijazah) }}"
+                                    alt="Current Foto Ijazah"
+                                    class="w-32 h-32 object-cover mx-auto rounded-lg border border-gray-200">
+                            </div>
                         @endif
+                        <div class="mt-2 text-center">
+                            <p class="text-xs text-gray-500 mb-1">Preview:</p>
+                            <img id="preview_foto_ijazah" src="#" alt="Preview Foto Ijazah"
+                                class="hidden w-32 h-32 object-cover mx-auto rounded-lg border border-gray-200">
+                        </div>
                     </div>
 
+                    {{-- Foto Formal --}}
                     <div>
                         <label for="foto_formal" class="block text-sm font-medium text-gray-700">Foto Formal</label>
                         <input type="file"
                             class="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"
-                            id="foto_formal" name="foto_formal" />
+                            id="foto_formal" name="foto_formal" onchange="previewImage(event, 'preview_foto_formal')" />
                         @error('foto_formal')
                             <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                         @enderror
                         @if (isset($biodataSiswa->foto_formal) && $biodataSiswa->foto_formal)
-                            <p class="mt-2 text-xs text-gray-500">File saat ini: <a
-                                    href="{{ asset('storage/' . $biodataSiswa->foto_formal) }}" target="_blank"
-                                    class="text-blue-600 hover:underline">Lihat</a></p>
+                            <div class="mt-2 text-center">
+                                <p class="text-xs text-gray-500 mb-1">File saat ini:</p>
+                                <img id="current_foto_formal" src="{{ asset('storage/' . $biodataSiswa->foto_formal) }}"
+                                    alt="Current Foto Formal"
+                                    class="w-32 h-32 object-cover mx-auto rounded-lg border border-gray-200">
+                            </div>
                         @endif
+                        <div class="mt-2 text-center">
+                            <p class="text-xs text-gray-500 mb-1">Preview:</p>
+                            <img id="preview_foto_formal" src="#" alt="Preview Foto Formal"
+                                class="hidden w-32 h-32 object-cover mx-auto rounded-lg border border-gray-200">
+                        </div>
                     </div>
                 </div>
 
@@ -187,4 +216,22 @@
             </form>
         </div>
     </div>
+    @push('scripts')
+        <script>
+            function previewImage(event, previewId) {
+                const reader = new FileReader();
+                reader.onload = function() {
+                    const output = document.getElementById(previewId);
+                    output.src = reader.result;
+                    output.classList.remove('hidden'); // Tampilkan preview
+                    // Opsional: Sembunyikan gambar "current" jika ada
+                    const currentImage = document.getElementById('current_' + previewId.replace('preview_', ''));
+                    if (currentImage) {
+                        currentImage.classList.add('hidden');
+                    }
+                };
+                reader.readAsDataURL(event.target.files[0]);
+            }
+        </script>
+    @endpush
 @endsection

@@ -3,14 +3,21 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Models\BiodataSiswa;
 use Illuminate\Http\Request;
+use App\Models\BiodataSiswa;
 use Illuminate\Support\Facades\Auth;
-
-
+use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class BioDataController extends Controller
 {
+
+    protected $fileFields = [
+        'foto_nilai_rapor',
+        'foto_ijazah',
+        'foto_formal',
+    ];
+
     /**
      * Display a listing of the resource.
      */
@@ -25,7 +32,7 @@ class BioDataController extends Controller
      */
     public function create()
     {
-        return view('user.biodata.create');
+        // ... (kode create) ...
     }
 
     /**
@@ -36,7 +43,6 @@ class BioDataController extends Controller
         if (Auth::user()->biodataSiswa) {
             return redirect()->route('user.biodata.index')->with('error', 'Anda sudah mengisi biodata siswa. Gunakan fitur edit untuk mengubah.');
         }
-
 
         $validatedData = $request->validate([
             'nisn' => [
@@ -58,46 +64,25 @@ class BioDataController extends Controller
             'foto_formal' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-
-        $fotoNilaiRaporPath = null;
-        if ($request->hasFile('foto_nilai_rapor')) {
-            $fotoNilaiRaporPath = $request->file('foto_nilai_rapor')->store('public/biodata_dokumen');
-            $fotoNilaiRaporPath = str_replace('public/', '', $fotoNilaiRaporPath); // Hapus 'public/' untuk disimpan di DB
+        foreach ($this->fileFields as $field) {
+            if ($request->hasFile($field)) {
+                if ($biodataSiswa->$field && Storage::disk('public')->exists($biodataSiswa->$field)) {
+                    Storage::disk('public')->delete($biodataSiswa->$field);
+                }
+                $biodataSiswa->$field = $request->file($field)->store('biodata_dokumen', 'public');
+            }
         }
 
-        $fotoIjazahPath = null;
-        if ($request->hasFile('foto_ijazah')) {
-            $fotoIjazahPath = $request->file('foto_ijazah')->store('public/biodata_dokumen');
-            $fotoIjazahPath = str_replace('public/', '', $fotoIjazahPath);
-        }
-
-        $fotoFormalPath = null;
-        if ($request->hasFile('foto_formal')) {
-            $fotoFormalPath = $request->file('foto_formal')->store('public/biodata_dokumen');
-            $fotoFormalPath = str_replace('public/', '', $fotoFormalPath);
-        }
-
-        BiodataSiswa::create([
+        BiodataSiswa::create(array_merge($validatedData, [
             'user_id' => Auth::id(),
-            'nisn' => $validatedData['nisn'],
-            'nama_lengkap' => $validatedData['nama_lengkap'],
-            'tempat_lahir' => $validatedData['tempat_lahir'],
-            'tanggal_lahir' => $validatedData['tanggal_lahir'],
-            'jenis_kelamin' => $validatedData['jenis_kelamin'],
-            'agama' => $validatedData['agama'],
-            'alamat' => $validatedData['alamat'],
-            'no_telepon' => $validatedData['no_telepon'],
-            'asal_sekolah' => $validatedData['asal_sekolah'],
-            'foto_nilai_rapor' => $fotoNilaiRaporPath,
-            'foto_ijazah' => $fotoIjazahPath,
-            'foto_formal' => $fotoFormalPath,
-        ]);
+        ], $filePaths));
 
         return redirect()->route('user.biodata.index')->with('success', 'Biodata siswa berhasil disimpan!');
-
     }
 
-
+    /**
+     * Show the form for editing the specified resource.
+     */
     public function edit()
     {
         $biodataSiswa = Auth::user()->biodataSiswa;
@@ -107,7 +92,6 @@ class BioDataController extends Controller
 
         return view('user.biodata.edit', compact('biodataSiswa'));
     }
-
 
     /**
      * Update the specified resource in storage.
@@ -122,12 +106,11 @@ class BioDataController extends Controller
 
         // --- Aturan Validasi ---
         $validatedData = $request->validate([
-            // NISN perlu pengecualian untuk unique rule agar tidak error saat update record sendiri
             'nisn' => [
                 'required',
                 'string',
                 'max:255',
-                'unique:biodata_siswas,nisn,' . $biodataSiswa->id, // Pengecualian ID biodata saat ini
+                'unique:biodata_siswas,nisn,' . $biodataSiswa->id,
             ],
             'nama_lengkap' => 'required|string|max:255',
             'tempat_lahir' => 'required|string|max:255',
@@ -137,26 +120,25 @@ class BioDataController extends Controller
             'alamat' => 'required|string',
             'no_telepon' => 'nullable|string|max:20',
             'asal_sekolah' => 'required|string|max:255',
-            // File bersifat opsional karena mungkin tidak diupdate
             'foto_nilai_rapor' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,pdf|max:2048',
             'foto_ijazah' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,pdf|max:2048',
             'foto_formal' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $this->uploadAndReplaceFile($request, $biodataSiswa, 'foto_nilai_rapor');
-        $this->uploadAndReplaceFile($request, $biodataSiswa, 'foto_ijazah');
-        $this->uploadAndReplaceFile($request, $biodataSiswa, 'foto_formal');
+        $filePaths = [];
+        foreach ($this->fileFields as $field) {
+            if ($request->hasFile($field)) {
+                if ($biodataSiswa->$field && Storage::disk('public')->exists($biodataSiswa->$field)) {
+                    Storage::disk('public')->delete($biodataSiswa->$field);
+                }
+                $biodataSiswa->$field = $request->file($field)->store('biodata_dokumen', 'public');
+            }
+        }
 
-        $biodataSiswa->nisn = $validatedData['nisn'];
-        $biodataSiswa->nama_lengkap = $validatedData['nama_lengkap'];
-        $biodataSiswa->tempat_lahir = $validatedData['tempat_lahir'];
-        $biodataSiswa->tanggal_lahir = $validatedData['tanggal_lahir'];
-        $biodataSiswa->jenis_kelamin = $validatedData['jenis_kelamin'];
-        $biodataSiswa->agama = $validatedData['agama'];
-        $biodataSiswa->alamat = $validatedData['alamat'];
-        $biodataSiswa->no_telepon = $validatedData['no_telepon'];
-        $biodataSiswa->asal_sekolah = $validatedData['asal_sekolah'];
+        // --- Perbarui Data di Database (Selain File) ---
+        $biodataSiswa->fill($validatedData); // Mengisi semua data yang tervalidasi sekaligus
 
+        // Logika untuk merubah status verifikasi menjadi pending
         $biodataSiswa->verification_status = 'pending';
         $biodataSiswa->verification_notes = null;
         $biodataSiswa->verified_by_user_id = null;
@@ -164,31 +146,14 @@ class BioDataController extends Controller
 
         $biodataSiswa->save();
 
-        return redirect()->route('user.biodata.index')->with('success', 'Biodata siswa berhasil diperbarui!');
+        return redirect()->route('user.biodata.index')->with('success', 'Biodata siswa berhasil diperbarui! Mohon tunggu verifikasi ulang dari admin.');
     }
 
-
     /**
-     * Handle file upload and replace the old file if a new one is uploaded.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\BiodataSiswa $biodataSiswa
-     * @param string $field
-     * @return void
+     * Remove the specified resource from storage.
      */
-    protected function uploadAndReplaceFile(Request $request, $biodataSiswa, $field)
+    public function destroy(string $id)
     {
-        if ($request->hasFile($field)) {
-            // Delete old file if exists
-            if ($biodataSiswa->$field) {
-                $oldFilePath = storage_path('app/public/' . $biodataSiswa->$field);
-                if (file_exists($oldFilePath)) {
-                    @unlink($oldFilePath);
-                }
-            }
-            // Store new file
-            $newFilePath = $request->file($field)->store('public/biodata_dokumen');
-            $biodataSiswa->$field = str_replace('public/', '', $newFilePath);
-        }
+        // ... (metode destroy jika ada) ...
     }
 }
