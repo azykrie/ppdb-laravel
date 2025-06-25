@@ -2,13 +2,14 @@
 
 use App\Http\Controllers\Admin\CalonSiswaController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\JurusanController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\PortalPendafataranController;
 use App\Http\Controllers\User\BioDataController;
+use App\Http\Controllers\User\DaftarUlangController;
 use App\Http\Controllers\User\DashboardController as UserDashboardController;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -41,14 +42,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('/{biodataSiswa}', [CalonSiswaController::class, 'update'])->name('update');
     });
 
-    Route::prefix('jurusan')->name('jurusan.')->group(function () {
-        Route::get('/', [JurusanController::class, 'index'])->name('index');
-        Route::get('/create', [JurusanController::class, 'create'])->name('create');
-        Route::post('/', [JurusanController::class, 'store'])->name('store');
-        Route::get('/{jurusan}/edit', [JurusanController::class, 'edit'])->name('edit');
-        Route::put('/{jurusan}', [JurusanController::class, 'update'])->name('update');
-        Route::delete('/{jurusan}', [JurusanController::class, 'destroy'])->name('destroy');
-    });
 });
 
 
@@ -62,6 +55,12 @@ Route::prefix('user')->name('user.')->group(function () {
         Route::post('/', [BioDataController::class, 'store'])->name('store');
         Route::get('/{biodataSiswa}/edit', [BioDataController::class, 'edit'])->name('edit');
         Route::put('/{biodataSiswa}', [BioDataController::class, 'update'])->name('update');
+    });
+
+    Route::prefix('daftar-ulang')->name('daftar-ulang.')->group(function () {
+        Route::get('/', [DaftarUlangController::class, 'index'])->name('index');
+        Route::get('/pembayaran', [DaftarUlangController::class, 'pembayaran'])->name('pembayaran');
+        Route::post('/pay', [DaftarUlangController::class, 'pay'])->name('pay');
     });
 
 });

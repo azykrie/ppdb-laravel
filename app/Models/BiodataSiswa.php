@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Pembayaran;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -29,6 +31,7 @@ class BiodataSiswa extends Model
         'verification_notes',
         'verified_by_user_id',
         'verified_at',
+        'jurusan',
     ];
 
     /**
@@ -37,6 +40,11 @@ class BiodataSiswa extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function pembayarans()
+    {
+        return $this->hasMany(Pembayaran::class);
     }
 
     /**

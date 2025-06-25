@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('foto_nilai_rapor')->nullable();
             $table->string('foto_ijazah')->nullable();
             $table->string('foto_formal')->nullable();
+            $table->string('jurusan');
             $table->timestamps();
         });
     }

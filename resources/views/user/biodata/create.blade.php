@@ -131,6 +131,23 @@
                     @enderror
                 </div>
 
+                <div>
+                    <label for="jurusan" class="block text-sm font-medium text-gray-700">Jurusan Yang Akan Di Pilih</label>
+                    <select id="jurusan" name="jurusan"
+                        class="mt-1 block w-full rounded-lg border-gray-200 p-4 text-sm shadow-sm" required>
+                        <option value="">Pilih Jurusan</option>
+                        <option value="RPL"
+                            {{ old('jurusan', $biodataSiswa->jurusan ?? '') == 'RPL' ? 'selected' : '' }}>RPL</option>
+                        <option value="TKJ"
+                            {{ old('jurusan', $biodataSiswa->jurusan ?? '') == 'TKJ' ? 'selected' : '' }}>TKJ</option>
+                        <option value="MMD"
+                            {{ old('jurusan', $biodataSiswa->jurusan ?? '') == 'MMD' ? 'selected' : '' }}>MMD</option>
+                    </select>
+                    @error('jurusan')
+                        <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 {{-- Bagian Upload Foto dengan Preview --}}
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                     {{-- Foto Nilai Rapor --}}

@@ -32,53 +32,52 @@ class BioDataController extends Controller
      */
     public function create()
     {
-        // ... (kode create) ...
+        return view('user.biodata.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        if (Auth::user()->biodataSiswa) {
-            return redirect()->route('user.biodata.index')->with('error', 'Anda sudah mengisi biodata siswa. Gunakan fitur edit untuk mengubah.');
-        }
-
-        $validatedData = $request->validate([
-            'nisn' => [
-                'required',
-                'string',
-                'max:255',
-                'unique:biodata_siswas,nisn',
-            ],
-            'nama_lengkap' => 'required|string|max:255',
-            'tempat_lahir' => 'required|string|max:255',
-            'tanggal_lahir' => 'required|date',
-            'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
-            'agama' => 'required|string|max:255',
-            'alamat' => 'required|string',
-            'no_telepon' => 'nullable|string|max:20',
-            'asal_sekolah' => 'required|string|max:255',
-            'foto_nilai_rapor' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,pdf|max:2048',
-            'foto_ijazah' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,pdf|max:2048',
-            'foto_formal' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
-
-        foreach ($this->fileFields as $field) {
-            if ($request->hasFile($field)) {
-                if ($biodataSiswa->$field && Storage::disk('public')->exists($biodataSiswa->$field)) {
-                    Storage::disk('public')->delete($biodataSiswa->$field);
-                }
-                $biodataSiswa->$field = $request->file($field)->store('biodata_dokumen', 'public');
-            }
-        }
-
-        BiodataSiswa::create(array_merge($validatedData, [
-            'user_id' => Auth::id(),
-        ], $filePaths));
-
-        return redirect()->route('user.biodata.index')->with('success', 'Biodata siswa berhasil disimpan!');
+public function store(Request $request)
+{
+    if (Auth::user()->biodataSiswa) {
+        return redirect()->route('user.biodata.index')->with('error', 'Anda sudah mengisi biodata siswa. Gunakan fitur edit untuk mengubah.');
     }
+
+    $validatedData = $request->validate([
+        'nisn' => [
+            'required',
+            'string',
+            'max:255',
+            'unique:biodata_siswas,nisn',
+        ],
+        'nama_lengkap' => 'required|string|max:255',
+        'tempat_lahir' => 'required|string|max:255',
+        'tanggal_lahir' => 'required|date',
+        'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
+        'agama' => 'required|string|max:255',
+        'alamat' => 'required|string',
+        'no_telepon' => 'nullable|string|max:20',
+        'asal_sekolah' => 'required|string|max:255',
+        'jurusan' => 'required',
+        'foto_nilai_rapor' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,pdf|max:2048',
+        'foto_ijazah' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,pdf|max:2048',
+        'foto_formal' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    ]);
+
+    $filePaths = [];
+    foreach ($this->fileFields as $field) {
+        if ($request->hasFile($field)) {
+            $filePaths[$field] = $request->file($field)->store('biodata_dokumen', 'public');
+        }
+    }
+
+    BiodataSiswa::create(array_merge($validatedData, [
+        'user_id' => Auth::id(),
+    ], $filePaths));
+
+    return redirect()->route('user.biodata.index')->with('success', 'Biodata siswa berhasil disimpan!');
+}
 
     /**
      * Show the form for editing the specified resource.
@@ -120,6 +119,7 @@ class BioDataController extends Controller
             'alamat' => 'required|string',
             'no_telepon' => 'nullable|string|max:20',
             'asal_sekolah' => 'required|string|max:255',
+            'jurusan' => 'required',
             'foto_nilai_rapor' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,pdf|max:2048',
             'foto_ijazah' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,pdf|max:2048',
             'foto_formal' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
