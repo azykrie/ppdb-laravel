@@ -60,7 +60,7 @@ Route::prefix('user')->name('user.')->group(function () {
     Route::prefix('daftar-ulang')->name('daftar-ulang.')->group(function () {
         Route::get('/', [DaftarUlangController::class, 'index'])->name('index');
         Route::get('/pembayaran', [DaftarUlangController::class, 'pembayaran'])->name('pembayaran');
-        Route::post('/pay', [DaftarUlangController::class, 'pay'])->name('pay');
+        Route::get('/success/{id}', [DaftarUlangController::class, 'success'])->name('success');
     });
 
 });

@@ -1,26 +1,47 @@
 @extends('layouts.user')
 
-@section('title', 'Daftar Ulang')
+@section('title', 'Daftar Ulang Berhasil')
 
 @section('content')
-<div class="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4 py-12">
-    <div class="w-full max-w-md bg-white shadow-xl rounded-2xl p-8 text-center">
-        <div class="mx-auto w-16 h-16 rounded-full bg-yellow-100 flex items-center justify-center mb-4">
-            <svg class="w-8 h-8 text-yellow-500" fill="none" stroke="currentColor" stroke-width="2"
-                viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M12 9v2m0 4h.01M12 5a7 7 0 1 1 0 14a7 7 0 0 1 0-14z" />
-            </svg>
-        </div>
-        <h2 class="text-2xl font-bold text-gray-800">Belum Daftar Ulang</h2>
-        <p class="mt-2 text-gray-600">
-            Anda belum melakukan pembayaran daftar ulang. Silakan melakukan pembayaran sebesar <span class="font-semibold text-indigo-600">Rp 200.000</span> untuk melanjutkan proses pendaftaran.
-        </p>
+    <div class="max-w-2xl mx-auto mt-10 px-4">
+        <div class="bg-white shadow-lg rounded-2xl p-6 text-gray-800">
+            <h2 class="text-2xl font-bold mb-4">Pembayaran Berhasil</h2>
 
-        <a href="{{ route('user.daftar-ulang.pembayaran') }}"
-            class="mt-6 inline-block w-full bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition">
-            Bayar Sekarang
-        </a>
+            <div class="mb-6">
+                <p class="text-sm text-gray-600">
+                    Selamat! Pembayaran daftar ulang Anda telah berhasil. Berikut adalah detail informasi Anda:
+                </p>
+            </div>
+
+            <div class="space-y-3 text-sm">
+                <div class="flex justify-between">
+                    <span class="font-medium">Nama Lengkap:</span>
+                    <span>{{ $biodataSiswa->nama_lengkap ?? '-' }}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="font-medium">NISN:</span>
+                    <span>{{ $biodataSiswa->nisn ?? '-' }}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="font-medium">Jurusan:</span>
+                    <span>{{ $biodataSiswa->jurusan ?? '-' }}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="font-medium">Status Pembayaran:</span>
+                    <span class="text-green-600 font-semibold">Berhasil</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="font-medium">Jumlah Dibayar:</span>
+                    <span>Rp {{ number_format($pembayaran->price, 0, ',', '.') }}</span>
+                </div>
+            </div>
+
+            <div class="mt-6 text-center">
+                <a href=""
+                   class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium py-2 px-4 rounded-lg">
+                    Kembali ke Dashboard
+                </a>
+            </div>
+        </div>
     </div>
-</div>
 @endsection
