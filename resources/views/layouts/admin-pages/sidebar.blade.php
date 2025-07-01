@@ -19,7 +19,7 @@
 
         <ul class="mt-6 space-y-1">
             <li>
-                <a href="#" class="block rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700">
+                <a href="{{ route('admin.dashboard.index') }}" class="block rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700">
                     Dashboard
                 </a>
             </li>
@@ -30,21 +30,21 @@
                 </a>
             </li>
             <li>
-                <a href="#"
+                <a href="{{ route('admin.berhasil-daftar-ulang.index') }}"
                     class="block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700">
-                    Jalur Pendaftaran
+                  Daftar Ulang Siswa
                 </a>
             </li>
             <li>
-                <a href="#"
+                <a href="{{ route('admin.data-siswa.index') }}"
                     class="block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700">
                     Data Siswa
                 </a>
             </li>
             <li>
-                <a href="#"
+                <a href="{{ route('admin.user.index') }}"
                     class="block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700">
-                    Pengumuman
+                    User
                 </a>
             </li>
         </ul>

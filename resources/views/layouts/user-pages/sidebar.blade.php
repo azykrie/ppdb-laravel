@@ -37,15 +37,9 @@
                 </a>
             </li>
             <li>
-                <a href="#"
+                <a href="{{ route('user.kalender.index') }}"
                     class="block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700">
                     Kalender
-                </a>
-            </li>
-            <li>
-                <a href="#"
-                    class="block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700">
-                    Pengumuman
                 </a>
             </li>
         </ul>

@@ -1,18 +1,18 @@
 <?php
 
+use App\Http\Controllers\Admin\BerhasilDafatarUlangController;
 use App\Http\Controllers\Admin\CalonSiswaController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DataSiswaController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\PortalPendafataranController;
 use App\Http\Controllers\User\BioDataController;
 use App\Http\Controllers\User\DaftarUlangController;
 use App\Http\Controllers\User\DashboardController as UserDashboardController;
+use App\Http\Controllers\User\KalenderController;
 use Illuminate\Support\Facades\Route;
-
-
-
-
 
 
 
@@ -42,6 +42,17 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('/{biodataSiswa}', [CalonSiswaController::class, 'update'])->name('update');
     });
 
+    Route::prefix('berhasil-daftar-ulang')->name('berhasil-daftar-ulang.')->group(function () {
+        Route::get('/', [BerhasilDafatarUlangController::class, 'index'])->name('index');
+    });
+
+    Route::prefix('data-siswa')->name('data-siswa.')->group(function () {
+        Route::get('/', [DataSiswaController::class, 'index'])->name('index');
+    });
+
+    Route::prefix('user')->name('user.')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('index');
+    });
 });
 
 
@@ -63,4 +74,7 @@ Route::prefix('user')->name('user.')->group(function () {
         Route::get('/success/{id}', [DaftarUlangController::class, 'success'])->name('success');
     });
 
+    Route::prefix('kalender')->name('kalender.')->group(function () {
+        Route::get('/', [KalenderController::class, 'index'])->name('index');
+    });
 });

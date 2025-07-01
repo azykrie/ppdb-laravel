@@ -12,7 +12,9 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('admin.dashboard.index');
+        $countCalonSiswa = \App\Models\BiodataSiswa::count();
+        $countBerhasilDaftarUlang = \App\Models\Pembayaran::where('status', 'berhasil')->count();
+        return view('admin.dashboard.index', compact('countCalonSiswa', 'countBerhasilDaftarUlang'));
     }
 
     /**

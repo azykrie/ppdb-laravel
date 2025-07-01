@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Pembayaran;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -12,7 +14,11 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('user.dashboard.index');
+        $user = Auth::user();
+        $statusDaftarUlang = Pembayaran::whereHas('biodataSiswa', function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })->latest()->value('status') ?? 'belum';
+        return view('user.dashboard.index', compact('statusDaftarUlang'));
     }
 
     /**
